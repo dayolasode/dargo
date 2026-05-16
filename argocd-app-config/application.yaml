@@ -8,9 +8,9 @@ spec:
 
   # Define the source git repository argocd where argocd pulls desired state from #
   source:
-    repoURL: 'https://github.com/dayolasode/minikube-local.git'
+    repoURL: 'https://github.com/dayolasode/dargo.git'
     targetRevision: HEAD
-    path: nana-examples/argocd-app-config/dev
+    path: argocd-app-config/dev
 
   # Define the destination cluster and namespace where argocd deploys the app to #
   destination:
@@ -20,17 +20,17 @@ spec:
     # namespace where the app will be deployed
     namespace: nana-example 
 
- syncPolicy:   
-   syncOptions:
+  syncPolicy:
+    syncOptions:
      # This option allows Argo CD to create the target namespace if it doesn't exist.
-    - CreateNamespace=true 
+      - CreateNamespace=true
 
-   automated:
+    automated:
     # Automatically correct any drift between the desired state and the live state i.e. override manual changes mad to the cluster 
-     selfHeal: true 
+      selfHeal: true
 
     # By default, argocd does not delete resources that are no longer defined in the git repository. This option allows argocd to delete such resources during sync.
-     prune: true
+      prune: true
 
 
 
