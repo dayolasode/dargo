@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-argocd-app
+  namespace: argocd
+spec: 
+  project: default
+
+  # Define the source git repository argocd where argocd pulls desired state from #
+  source:
+    repoURL: 'https://github.com/dayolasode/minikube-local.git'
+    targetRevision: HEAD
+    path: nana-examples/argocd-app-config/dev
+
+  # Define the destination cluster and namespace where argocd deploys the app to #
+  destination:
+    # This is the default in-cluster API server URL. It can be used to deploy to the same cluster where Argo CD is running.
+    server: https://kubernetes.default.svc  
+
+    # namespace where the app will be deployed
+    namespace: nana-example 
+
+ syncPolicy:   
+   syncOptions:
+     # This option allows Argo CD to create the target namespace if it doesn't exist.
+    - CreateNamespace=true 
+
+   automated:
+    # Automatically correct any drift between the desired state and the live state i.e. override manual changes mad to the cluster 
+     selfHeal: true 
+
+    # By default, argocd does not delete resources that are no longer defined in the git repository. This option allows argocd to delete such resources during sync.
+     prune: true
+
+
+
+# By default, argocd polls the repo every 3 minutes (180s) for changes and syncs the app if there are changes. 
+# If a more frequent sync is desired, you either:
+
+# 1) Edit the configMap resource named argocd-cm in the argocd namespace and set the value of the key 'repository.credentials' to a shorter polling interval. For example, setting it to '30s' will make argocd poll the repo every 30 seconds for changes. 
+# 2) Use a webhook that triggers argocd to fire events immediately when there changes  in the git repository
+
+
+      
+
+
